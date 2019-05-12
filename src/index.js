@@ -1,11 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import firebase from "firebase";
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'semantic-ui-css/semantic.min.css'
 import {configureStore} from './store/index'
 import {Provider} from 'react-redux'
+
+var config = {
+    apiKey: "AIzaSyDuleCznnA-Rppk2twoeeBS2lZ8tAKs_nA",
+    authDomain: "react-board-6c9f9.firebaseapp.com",
+    databaseURL: "https://react-board-6c9f9.firebaseio.com",
+    projectId: "react-board-6c9f9",
+    storageBucket: "react-board-6c9f9.appspot.com",
+    messagingSenderId: "324400022113",
+    appId: "1:324400022113:web:257336cdf4c05417"
+  };
+  firebase.initializeApp(config);
+
 const store = configureStore();
 
 ReactDOM.render(
