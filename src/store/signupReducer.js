@@ -1,4 +1,4 @@
-
+import firebase from 'firebase'
 
 const SIGNUP_REQUEST = 'SIGNUP_REQUEST'
 const SIGNUP_SUCCESS = 'SIGNUP_REQUEST'
@@ -23,13 +23,18 @@ function signupFailed() {
 }
 
 //thunk
-export function signup() {
+export function signup(email, password) {
     return (dispatch) => {
         dispatch(signupRequest());
 
-        setTimeout(() => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(()=>{
             dispatch(signupSucess());
-        }, 2000)
+        })
+        .catch(function(error) {
+            console.log(error);
+            dispatch(signupFailed());
+          });
     }
 
     //api call
