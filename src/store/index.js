@@ -3,6 +3,7 @@ import authReducer from './authReducer'
 import signupReducer from './signupReducer'
 import loginReducer from './loginReducer'
 import thunk from 'redux-thunk'
+import logoutReducer from './logoutReducer';
 
 
 
@@ -12,7 +13,8 @@ export function configureStore(){
         combineReducers({
             auth:authReducer,
             signup:signupReducer,
-            login:loginReducer
+            login:loginReducer,
+            logout:logoutReducer,
         }),
         compose(
             applyMiddleware(thunk),

@@ -1,32 +1,48 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
-import {Menu} from 'semantic-ui-react'
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { Menu, Button } from 'semantic-ui-react'
+import { logout } from '../../store/logoutReducer'
+import { connect } from 'react-redux'
 
-class Header extends Component{
+class Header extends Component {
 
-    render(){
-        return(
+    onLogout = () => {
+        this.props.logout();
+    }
+    render() {
+        return (
             <Menu>
-                <Menu.Item>
+                <Menu.Item header>
                     게시판
                 </Menu.Item>
                 <Menu.Item>
-                <Link to="/">홈</Link>
+                    <Link to="/">홈</Link>
                 </Menu.Item>
                 <Menu.Menu position="right">
+                    <Menu.Item>
+                        <Button onClick={this.onLogout}>로그아웃</Button>
+                    </Menu.Item>
                     <Menu.Item>
                         <Link to="/login">로그인</Link>
                     </Menu.Item>
                     <Menu.Item>
                         <Link to="/signup">
-                        회원가입
+                            회원가입
                         </Link>
                     </Menu.Item>
                 </Menu.Menu>
             </Menu>
-            
+
         )
 
     }
 }
-export default Header;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout: () => dispatch(logout())
+    }
+
+}
+
+export default connect(null,mapDispatchToProps)(Header);
