@@ -12,6 +12,8 @@ class LoginForm extends Component {
         message:'',
     }
 
+    
+
     static getDerivedStateFromProps = (props) =>{
         const {error} = props;
         if(error){
@@ -25,6 +27,7 @@ class LoginForm extends Component {
             const {message} = this.state;
             return{
                 message:message
+                
             }
         }
         return null;    

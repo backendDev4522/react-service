@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import 'semantic-ui-css/semantic.min.css'
 import {configureStore} from './store/index'
 import {Provider} from 'react-redux'
-
+import {auth} from './store/authReducer'
 var config = {
     apiKey: "AIzaSyDuleCznnA-Rppk2twoeeBS2lZ8tAKs_nA",
     authDomain: "react-board-6c9f9.firebaseapp.com",
@@ -17,10 +17,12 @@ var config = {
     messagingSenderId: "324400022113",
     appId: "1:324400022113:web:257336cdf4c05417"
   };
-  firebase.initializeApp(config);
+
+firebase.initializeApp(config);
 
 const store = configureStore();
 
+store.dispatch(auth());
 ReactDOM.render(
 <Provider store={store}>
     <App />
