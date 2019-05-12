@@ -1,7 +1,7 @@
 import firebase from 'firebase'
 
 const SIGNUP_REQUEST = 'SIGNUP_REQUEST'
-const SIGNUP_SUCCESS = 'SIGNUP_REQUEST'
+const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS'
 const SIGNUP_FAILED = 'SIGNUP_FAILED'
 
 function signupRequest() {
