@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import { Button, Checkbox, Form, Message } from 'semantic-ui-react'
+import {signup} from '../../store/signupReducer'
+
+ 
 class SignupForm extends Component {
     state = {
         email:'',
@@ -60,12 +63,14 @@ class SignupForm extends Component {
             message:''
         })
 
+        this.props.signup(email, password)
         //서버로 회원가입
     }
 
     render() {
 
-        const {email, password, password2, terms, message} = this.state;
+        const { email, password, password2, terms, message } = this.state;
+        const { isLoading } = this.props;
         return (
             <Form>
                 <Form.Field>
@@ -83,7 +88,7 @@ class SignupForm extends Component {
                 <Form.Field>
                     <Checkbox label='서비스 이용약관' name="terms" checked={terms} onChange={this.onCheckBoxHandleChange} />
                 </Form.Field>
-                <Button type='submit' onClick={this.onSignup}>회원가입</Button>
+                <Button type='submit' loading={isLoading} onClick={this.onSignup}>회원가입</Button>
                 {
                     message?<Message content={message} />:null
                 }
@@ -95,12 +100,12 @@ class SignupForm extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        
+        isLoading: state.signup.isLoading,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        signup: (email, password) => dispatch(signup(email, password))
     }
 }
 
