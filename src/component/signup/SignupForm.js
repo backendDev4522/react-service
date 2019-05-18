@@ -1,27 +1,26 @@
 import React, { Component } from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { Button, Checkbox, Form, Message } from 'semantic-ui-react'
-import {signup} from '../../store/signupReducer'
+import { signup, singupValidationFailed } from '../../store/signupReducer'
 
- 
+
 class SignupForm extends Component {
     state = {
-        email:'',
-        password:'',
-        password2:'',
-        terms:false,
-        message:'',
+        email: '',
+        password: '',
+        password2: '',
+        terms: false,
     }
 
     onHandleChange = (e) => {
         this.setState({
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
     onCheckBoxHandleChange = (e) => {
         this.setState({
-            terms:!this.state.terms,
+            terms: !this.state.terms,
         })
     }
 
@@ -34,34 +33,24 @@ class SignupForm extends Component {
             password2,
             terms
         } = this.state;
-        if(!email){
-            this.setState({
-                message:'이메일을 입력하세요'
-            })
+
+        if (!email) {
+            this.props.singupValidationFailed(new Error('이메일을 입력하세요'))
             return;
         }
-        if(!password){
-            this.setState({
-                message:'비밀번호를 입력하세요'
-            })
+        if (!password) {
+            this.props.singupValidationFailed(new Error('패스워드를 입력하세요'))
             return;
         }
-        if(password !== password2){
-            this.setState({
-                message:'비밀번호가 일치하지 않습니다.'
-            })
-            return;
-        }
-        if(!terms){
-            this.setState({
-                message:'서비스 이용약관에 동의하세요'
-            })
+        if (password !== password2) {
+            this.props.singupValidationFailed(new Error('비밀번호가 일치하지 않습니다.'))
             return;
         }
 
-        this.setState({
-            message:''
-        })
+        if (!terms) {
+            this.props.singupValidationFailed(new Error('약관에 동의하세요'))
+            return;
+        }
 
         this.props.signup(email, password)
         //서버로 회원가입
@@ -69,28 +58,28 @@ class SignupForm extends Component {
 
     render() {
 
-        const { email, password, password2, terms, message } = this.state;
-        const { isLoading } = this.props;
+        const { email, password, password2, terms } = this.state;
+        const { isLoading, error } = this.props;
         return (
             <Form>
                 <Form.Field>
                     <label>이메일</label>
-                    <input placeholder='Email'name="email" value={email} onChange={this.onHandleChange} />
+                    <input placeholder='Email' name="email" value={email} onChange={this.onHandleChange} />
                 </Form.Field>
                 <Form.Field>
                     <label>비밀번호</label>
-                    <input placeholder='Password' name="password" type="password" value={password} onChange={this.onHandleChange}/>
+                    <input placeholder='Password' name="password" type="password" value={password} onChange={this.onHandleChange} />
                 </Form.Field>
                 <Form.Field>
                     <label>비밀번호 확인</label>
-                    <input placeholder='Confirm password' name="password2" type="password" value={password2} onChange={this.onHandleChange}/>
+                    <input placeholder='Confirm password' name="password2" type="password" value={password2} onChange={this.onHandleChange} />
                 </Form.Field>
                 <Form.Field>
                     <Checkbox label='서비스 이용약관' name="terms" checked={terms} onChange={this.onCheckBoxHandleChange} />
                 </Form.Field>
                 <Button type='submit' loading={isLoading} onClick={this.onSignup}>회원가입</Button>
                 {
-                    message?<Message content={message} />:null
+                    error ? <Message content={error.message} /> : null
                 }
             </Form>
 
@@ -101,12 +90,15 @@ class SignupForm extends Component {
 const mapStateToProps = (state) => {
     return {
         isLoading: state.signup.isLoading,
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-        signup: (email, password) => dispatch(signup(email, password))
+        error: state.signup.error
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(SignupForm);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        signup: (email, password) => dispatch(signup(email, password)),
+        singupValidationFailed: (error) => dispatch(singupValidationFailed(error))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);
