@@ -7,6 +7,7 @@ import Header from './component/header/Header'
 import { connect } from 'react-redux'
 import DisplayNamePage from './page/displayname/DisplayNamePage'
 import AddMoviePage from './page/addMovie/AddMoviePage'
+import TestPage from './page/test/Testpage'
 
 /** 라우팅
  * /
@@ -63,6 +64,8 @@ class App extends Component {
             return <Redirect to="/login" />
           }
         }} />
+
+        <Route path="/test" component={TestPage}/>
       </Router>
     )
 

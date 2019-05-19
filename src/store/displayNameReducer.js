@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import {updateUser} from './authReducer'
+import { updateUser } from './authReducer'
 
 
 const UPDATE_DISPLAY_NAME_REQUEST = 'UPDATE_DISPLAY_NAME_REQUEST'
@@ -19,12 +19,14 @@ function updataDisplayNameSuccess() {
         type: UPDATE_DISPLAY_NAME_SUCCESS,
     }
 }
+
 function updateDisplayNameFailed(error) {
     return {
         type: UPDATE_DISPLAY_NAME_FAILED,
         payload: error
     }
 }
+
 export function displayNameValidationFailed(error) {
     return {
         type: DISPLAY_NAME_VALIDATION_FAILED,
@@ -37,7 +39,7 @@ export function updateDisplayName(displayName) {
     return (dispatch) => {
         dispatch(updataDisplayNameRequest());
         const user = firebase.auth().currentUser;
-
+        
         if (user) {
             //로그인 한 상태일 때만 가능
             user.updateProfile({

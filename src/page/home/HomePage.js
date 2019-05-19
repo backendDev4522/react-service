@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-
+import MovieList from '../../component/movie/MovieList'
 class HomePage extends Component {
 
 
     render(){
         return(
             <div>
-                Home Page
+                <MovieList/>
             </div>
 
         )
