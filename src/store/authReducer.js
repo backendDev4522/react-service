@@ -1,27 +1,33 @@
 import firebase from 'firebase'
 
 const UPDATE_USER = 'UPDATE_USER'
-export const updateUser = (user) => {
+export const updateUser = (firebaseUser) => {
+    const newUser = new User(firebaseUser);
     return {
         type:UPDATE_USER,
-        payload:user,
+        payload:newUser,
     }
 }
 
+class User {
+    constructor(firebaseUser){
+        
+        this.displayName = firebaseUser.displayName;
+        this.email = firebaseUser.email;
+        this.emailVerified = firebaseUser.emailVerified;
+        this.photoURL = firebaseUser.photoURL;
+        this.isAnonymous = firebaseUser.isAnonymous;
+        this.uid = firebaseUser.uid;
+        this.providerData = firebaseUser.providerData;
+    }
+}
+
+
 export const auth = () => {
     return (dispatch) => {
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          const newUser = {
-              displayName:user.displayName,
-              email:user.email,
-              emailVerified:user.emailVerified,
-              photoURL:user.photoURL,
-              isAnonymous:user.isAnonymous,
-              uid:user.uid,
-              providerData:user.providerData
-          }
-          dispatch(updateUser(newUser))
+    firebase.auth().onAuthStateChanged(function(firebaseUser) {
+        if (firebaseUser) {
+          dispatch(updateUser(firebaseUser))
       
         } else {
             dispatch(updateUser(null));
