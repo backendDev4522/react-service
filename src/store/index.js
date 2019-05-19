@@ -5,6 +5,7 @@ import loginReducer from './loginReducer'
 import thunk from 'redux-thunk'
 import logoutReducer from './logoutReducer';
 import displayNameReducer from './displayNameReducer';
+import addMovieReducer from './addMovieReducer';
 
 
 
@@ -14,9 +15,10 @@ export function configureStore(){
         combineReducers({
             auth:authReducer,
             signup:signupReducer,
-            displayName:displayNameReducer,
             login:loginReducer,
             logout:logoutReducer,
+            displayName:displayNameReducer,
+            addMovie:addMovieReducer,
         }),
         compose(
             applyMiddleware(thunk),

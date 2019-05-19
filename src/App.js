@@ -6,6 +6,7 @@ import SignupPage from './page/signup/SignupPage'
 import Header from './component/header/Header'
 import { connect } from 'react-redux'
 import DisplayNamePage from './page/displayname/DisplayNamePage'
+import AddMoviePage from './page/addMovie/AddMoviePage'
 
 /** 라우팅
  * /
@@ -32,6 +33,8 @@ class App extends Component {
             return <Redirect to="/login" />
           }
         }} />
+
+        <Route path="/movie/add" component={AddMoviePage}/>
 
         <Route path="/login" component={() => {
           if (this.props.user) {
