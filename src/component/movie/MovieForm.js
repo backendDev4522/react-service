@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Grid, Form, Message, Header } from 'semantic-ui-react'
+import { Grid, Form, Message, Header, Image } from 'semantic-ui-react'
 import { connect } from 'react-redux'
-import {Link} from 'react-router-dom'
-import { addMovieValidationFailed, addMovie,initAddMovieState } from '../../store/addMovieReducer'
+import { Link } from 'react-router-dom'
+import { addMovieValidationFailed, addMovie, initAddMovieState } from '../../store/addMovieReducer'
 class MovieForm extends Component {
 
     state = {
@@ -10,9 +10,10 @@ class MovieForm extends Component {
         director: '',
         openedAt: '',
         description: '',
+        image: null,
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.initAddMovieState();
     }
     onHandleChange = (e) => {
@@ -20,9 +21,37 @@ class MovieForm extends Component {
             [e.target.name]: e.target.value,
         })
     }
+    onImageChange = (e) => {
+        if (!(e.target.files && e.target.files.length))
+            return;
 
+        console.log(e.target.files[0]);
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = () => {
+            this.setState({
+                image: {
+                    file: file,
+                    src: reader.result
+                }
+            })
+
+        }
+    }
+
+    onImageDelete = () => {
+        this.setState({
+            image: null,
+        })
+    }
+
+    onAddImage = () => {
+        this.refs.image.click();
+    }
     onAddMovie = () => {
-        const { name, director, openedAt, description } = this.state;
+        const { name, director, openedAt, description, image } = this.state;
 
         if (!name) {
             this.props.addMovieValidationFailed(new Error('제목을 입력하세요'));
@@ -38,13 +67,14 @@ class MovieForm extends Component {
             return;
         }
 
+        const file = image? image.file:null;
         //유효성 검사
-        this.props.addMovie(name, director, openedAt, description);
+        this.props.addMovie(name, director, openedAt, description, file);
         //추가
     }
     render() {
-        const { name, director, openedAt, description } = this.state;
-        const { error, isSuccess, isLoading} = this.props;
+        const { name, director, openedAt, description, image } = this.state;
+        const { error, isSuccess, isLoading } = this.props;
 
         if (isSuccess) {
             return (
@@ -63,6 +93,13 @@ class MovieForm extends Component {
                 <Grid>
                     <Grid.Row>
                         <Grid.Column mobile={16} tablet={8} computer={8}>
+                            <input ref='image' type='file' style={{ display: 'none' }} onChange={this.onImageChange} />
+                            <Form.Button fluid onClick={this.onAddImage}>이미지 등록</Form.Button>
+                            {image ?
+                                <Image src={image.src} style={{ cursor: 'pointer' }} onClick={this.onImageDelete} /> :
+                                null}
+
+
 
                         </Grid.Column>
                         <Grid.Column mobile={16} tablet={8} computer={8}>
@@ -79,10 +116,9 @@ class MovieForm extends Component {
                             }
                         </Grid.Column>
                     </Grid.Row>
-
                     <Grid.Row centered>
                         <Grid.Column mobile={16} tablet={8} computer={8}>
-                            <Form.Button loading={isLoading} onClick={this.onAddMovie}>영화 등록</Form.Button>
+                            <Form.Button fluid loading={isLoading} onClick={this.onAddMovie}>영화 등록</Form.Button>
                         </Grid.Column>
                     </Grid.Row>
 
@@ -104,9 +140,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addMovie: (name, director, openedAt, description) => dispatch(addMovie(name, director, openedAt, description)),
+        addMovie: (name, director, openedAt, description, file) => dispatch(addMovie(name, director, openedAt, description, file)),
         addMovieValidationFailed: (error) => dispatch(addMovieValidationFailed(error)),
-        initAddMovieState:()=> dispatch(initAddMovieState()),
+        initAddMovieState: () => dispatch(initAddMovieState()),
     }
 }
 
