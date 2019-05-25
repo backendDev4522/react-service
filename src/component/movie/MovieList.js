@@ -2,21 +2,34 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getMovieList } from '../../store/movieListReducer'
 import MovieItem from '../movie/MovieItem'
-import { Grid } from 'semantic-ui-react';
+import { Grid, Button } from 'semantic-ui-react';
+
 
 class MovieList extends Component {
 
     componentDidMount() {
-        this.props.getMovieList();
+        this.props.getMovieList(null);
     }
 
+
+    onLoadMore = () =>{
+        if(this.props.list.length){
+            this.props.getMovieList(this.props.list[this.props.list.length - 1]);
+        } else { 
+            this.props.getMoviewList(null);
+        }
+    }
     render() {
         const { list } = this.props;
-        const items = list.map( (item) => {
-            const { id } = item;
-            const { name, openedAt, description, director } = item.data();
-            return <Grid.Column>
-                <MovieItem mobile={8} tablet={5} computer={4}
+        const items = list.map( (doc) => {
+      
+
+            const id = doc.id;
+            const data = doc.data();
+            const {name, openedAt, director, description, imageURL} = data;
+            return <Grid.Column key={id} mobile={8} tablet={5} computer={4}>
+                <MovieItem 
+                imageUrl={imageURL}
                 key={id}
                 name={name}
                 openedAt={openedAt}
@@ -24,12 +37,17 @@ class MovieList extends Component {
                 description={description}
                 likeCnt={0}
             />
-            </Grid.Column>
+            </Grid.Column >
         })
-        return (
+    return(
             <Grid>
                 {items}
-            </Grid>
+              <Grid.Row centered>
+                <Button onClick={this.onLoadMore}>더 불러오기</Button>
+        
+              </Grid.Row>
+            </Grid >
+
         )
     }
 }
@@ -44,7 +62,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getMovieList: () => dispatch(getMovieList())
+        getMovieList: (last) => dispatch(getMovieList(last))
     }
 }
 
