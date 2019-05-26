@@ -41,8 +41,14 @@ function addMovieFailed(error){
 }
 
 export function  addMovie(name, director, openedAt, description, file){
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(addMovieRequest());
+
+        //firebase에 저장된 ID 가져오는 방법
+        // const userId = firebase.auth().currentUser.uid;
+
+        //redux state에서 ID가져오는 방법
+        const userId = getState().auth.user.uid;
 
         if(file){
             //이미지 저장하고 이미지 다운로드 URL 가지와서 데이터베이스에 같이 저장
@@ -58,6 +64,7 @@ export function  addMovie(name, director, openedAt, description, file){
                 return  firebase.firestore().collection('movies').add({
                     name:name,
                     imageURL:downloadURL,
+                    userId:userId,
                     director:director,
                     openedAt:openedAt,
                     description:description,
