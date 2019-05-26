@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { Grid, Form, Message, Header, Image } from 'semantic-ui-react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { addMovieValidationFailed, addMovie, initAddMovieState } from '../../store/addMovieReducer'
+import { Grid, Form, Image } from 'semantic-ui-react'
+
 class MovieForm extends Component {
 
     state = {
@@ -12,15 +10,40 @@ class MovieForm extends Component {
         description: '',
         image: null,
     }
+    
+    static defaultProps = {
+        name: '',
+        director: '',
+        openedAt: '',
+        description: '',
+        image: null,
+    }
 
     componentDidMount() {
-        this.props.initAddMovieState();
+        const {
+            image,
+            name,
+            director,
+            openedAt,
+            description,
+        } = this.props;
+
+        this.setState({
+            image,
+            name,
+            director,
+            openedAt,
+            description,
+
+        })
     }
+
     onHandleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value,
         })
     }
+
     onImageChange = (e) => {
         if (!(e.target.files && e.target.files.length))
             return;
@@ -50,47 +73,30 @@ class MovieForm extends Component {
     onAddImage = () => {
         this.refs.image.click();
     }
-    onAddMovie = () => {
-        const { name, director, openedAt, description, image } = this.state;
 
-        if (!name) {
-            this.props.addMovieValidationFailed(new Error('제목을 입력하세요'));
-            return;
-        } else if (!director) {
-            this.props.addMovieValidationFailed(new Error('감독을 입력하세요'));
-            return;
-        } else if (!openedAt) {
-            this.props.addMovieValidationFailed(new Error('개봉일을 입력하세요'));
-            return;
-        } else if (!description) {
-            this.props.addMovieValidationFailed(new Error('설명을 입력하세요'));
-            return;
+    getValue = () => {
+        const {
+            name,
+            description,
+            director,
+            openedAt,
+            image
+        } = this.state;
+        return {
+            name,
+            description,
+            director,
+            openedAt,
+            image,
+
         }
-
-        const file = image? image.file:null;
-        //유효성 검사
-        this.props.addMovie(name, director, openedAt, description, file);
-        //추가
     }
     render() {
         const { name, director, openedAt, description, image } = this.state;
-        const { error, isSuccess, isLoading } = this.props;
 
-        if (isSuccess) {
-            return (
-                <Grid>
-                    <Grid.Row centered>
-                        <Grid.Column mobile={16} tablet={8} computer={8}>
-                            <Header>영화 등록 완료</Header>
-                            <Link to="/">영화 목록으로</Link>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            )
-        }
         return (
-            <Form>
-                <Grid>
+            <div>
+                <Form>
                     <Grid.Row>
                         <Grid.Column mobile={16} tablet={8} computer={8}>
                             <input ref='image' type='file' style={{ display: 'none' }} onChange={this.onImageChange} />
@@ -98,9 +104,6 @@ class MovieForm extends Component {
                             {image ?
                                 <Image src={image.src} style={{ cursor: 'pointer' }} onClick={this.onImageDelete} /> :
                                 null}
-
-
-
                         </Grid.Column>
                         <Grid.Column mobile={16} tablet={8} computer={8}>
                             <Form.Input name="name" label="영화 제목" placeholder="영화 제목" value={name} onChange={this.onHandleChange} />
@@ -109,41 +112,11 @@ class MovieForm extends Component {
                             <Form.TextArea name="description" label="설명" placeholder="설명" value={description} onChange={this.onHandleChange} />
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row centered>
-                        <Grid.Column mobile={16} tablet={8} computer={8}>
-                            {
-                                error ? <Message content={error.message} /> : null
-                            }
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row centered>
-                        <Grid.Column mobile={16} tablet={8} computer={8}>
-                            <Form.Button fluid loading={isLoading} onClick={this.onAddMovie}>영화 등록</Form.Button>
-                        </Grid.Column>
-                    </Grid.Row>
-
-                </Grid>
-            </Form>
+                </Form>
+            </div>
         )
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        error: state.addMovie.error,
-        isLoading: state.addMovie.isLoading,
-        isSuccess: state.addMovie.isSuccess,
-        isFailed: state.addMovie.isFailed,
 
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addMovie: (name, director, openedAt, description, file) => dispatch(addMovie(name, director, openedAt, description, file)),
-        addMovieValidationFailed: (error) => dispatch(addMovieValidationFailed(error)),
-        initAddMovieState: () => dispatch(initAddMovieState()),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MovieForm);
+export default MovieForm;

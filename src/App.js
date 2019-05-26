@@ -7,7 +7,9 @@ import Header from './component/header/Header'
 import { connect } from 'react-redux'
 import DisplayNamePage from './page/displayname/DisplayNamePage'
 import AddMoviePage from './page/addMovie/AddMoviePage'
+import UpdateMoviePage from './page/updateMovie/updateMoviePage'
 import TestPage from './page/test/Testpage'
+import MyMovieListPage from './page/myMovieList/MyMovieListPags';
 
 /** 라우팅
  * /
@@ -35,7 +37,20 @@ class App extends Component {
           }
         }} />
 
-        <Route path="/movie/add" component={AddMoviePage}/>
+        <Route path="/my-movies" exact component={() => {
+          if (this.props.user && this.props.user.displayName) {
+            return <MyMovieListPage />
+          } else if (this.props.user) {
+            return <Redirect to="/display-name" />
+          } else {
+            return <Redirect to="/login" />
+          }
+        }} />
+
+
+        <Route path="/movie/add" component={AddMoviePage} />
+
+        <Route path="/movie/:movieId/update" component={UpdateMoviePage} />
 
         <Route path="/login" component={() => {
           if (this.props.user) {
@@ -65,7 +80,7 @@ class App extends Component {
           }
         }} />
 
-        <Route path="/test" component={TestPage}/>
+        <Route path="/test" component={TestPage} />
       </Router>
     )
 

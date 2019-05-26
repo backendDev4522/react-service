@@ -20,6 +20,7 @@ class MovieItem extends Component {
         //'url(' + imageUrl + ')'
         //`url(${imageUrl})`
         return (
+            
             <Card>
                 <div style={{
                     height: 300,
