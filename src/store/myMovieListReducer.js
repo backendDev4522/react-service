@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-
+import { DELETE_MY_MOVIE_SUCCESS } from './types'
 const GET_MY_MOVIE_LIST_REQUEST = 'GET_MY_MOVIE_LIST_REQUEST';
 const GET_MY_MOVIE_LIST_SUCCESS = 'GET_MY_MOVIE_LIST_SUCCESS';
 const GET_MY_MOVIE_LIST_FAILED = 'GET_MY_MOVIE_LIST_FAILED';
@@ -50,6 +50,8 @@ export function getMyMovieList(last) {
         query.get()
             .then((snapshot) => {
                 dispatch(getMyMovieListSuccess(snapshot.docs, last));
+                console.log(snapshot.doc)
+                
             })
             .catch((error) => {
                 console.log(error);
@@ -88,6 +90,13 @@ export default function myMovieListReducer(state = initialState, action) {
                 isSuccess: false,
                 isFailed: true,
                 error: action.payload
+            })
+        case DELETE_MY_MOVIE_SUCCESS:
+             return Object.assign({}, state, {
+                isLoading: false,
+                isSuccess: true,
+                isFailed: false,
+                list: state.list.filter((doc)=> doc.id !== action.payload)
             })
         default:
             return state;

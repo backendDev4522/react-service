@@ -4,7 +4,8 @@ class MyMovieItem extends Component {
 
     static defaultProps = {
         id:null,
-        onClick:null,
+        onDelete:null,
+        onUpdate:null,
         imageUrl: '',
         name: '',
         openedAt: '',
@@ -12,11 +13,17 @@ class MyMovieItem extends Component {
         likeCnt: '',
     }
 
-    onClick = () => {
-        if(this.props.onClick && this.props.id){
-        this.props.onClick(this.props.id);
+    onDelete = () => {
+        if(this.props.onDeleteClick && this.props.id){
+            this.props.onDeleteClick(this.props.id);
     }
+}
+    onUpdate = () => {
+        if(this.props.onUpdateClick && this.props.id){
+        this.props.onUpdateClick(this.props.id);
     }
+}
+
     render() {
         const {
             imageUrl,
@@ -51,12 +58,13 @@ class MyMovieItem extends Component {
                     </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
-                    <Button onClick={this.onClick}>수정하기</Button>
-                    <Button>삭제하기</Button>
+                    <Button onClick={this.onUpdate}>수정하기</Button>
+                    <Button onClick={this.onDelete}>삭제하기</Button>
                 </Card.Content>
             </Card>
 
         )
     }
 }
+
 export default MyMovieItem;

@@ -4,12 +4,14 @@ import { connect } from 'react-redux'
 import { getMyMovieList } from '../../store/myMovieListReducer'
 import MyMovieItem from '../movie/MyMovieItem'
 import { Grid, Button } from 'semantic-ui-react';
+import {deleteMyMovie} from '../../store/deleteMyMovieReducer'
 
 
 class MyMovieList extends Component {
 
     componentDidMount() {
         this.props.getMyMovieList(null);
+        
     }
 
 
@@ -21,18 +23,28 @@ class MyMovieList extends Component {
         }
     }
 
-    onItemClick = (id) => {
-        console.log('onItemClick', id);
+    onItemUpdateClick = (id) => {
+        console.log('onItemUpdateClick', id);
         this.props.history.push(`/movie/${id}/update`)
     }
+
+    onItemDeleteClick = (id) => {
+        console.log('delete id : ', id);
+        this.props.deleteMyMovie(id);
+    
+
+    }
+
     render() {
         const { list } = this.props;
+        
         const items = list.map( (doc) => {
       
 
             const id = doc.id;
             const data = doc.data();
             const {name, openedAt, director, description, imageURL} = data;
+            
             return <Grid.Column key={id} mobile={8} tablet={5} computer={4}>
                 <MyMovieItem 
                 id={id}
@@ -43,7 +55,8 @@ class MyMovieList extends Component {
                 director={director}
                 description={description}
                 likeCnt={0}
-                onClick={this.onItemClick}
+                onUpdateClick={this.onItemUpdateClick}
+                onDeleteClick={this.onItemDeleteClick}
             />
             </Grid.Column >
         })
@@ -70,7 +83,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getMyMovieList: (last) => dispatch(getMyMovieList(last))
+        getMyMovieList: (last) => dispatch(getMyMovieList(last)),
+        deleteMyMovie: (id) => dispatch(deleteMyMovie(id))
     }
 }
 
