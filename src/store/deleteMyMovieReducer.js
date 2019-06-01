@@ -27,7 +27,7 @@ function deleteMyMovieFailed(error) {
 export function deleteMyMovie(movieId) {
     return (dispatch, getState) => {
         dispatch(deleteMyMovieRequest());
-        const userId = getState().auth.user.uid;
+        // const userId = getState().auth.user.uid;
 
         // movieId 데이터를 가져옴
 

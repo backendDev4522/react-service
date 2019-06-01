@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, Button } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 import { logout } from '../../store/logoutReducer'
 import { connect } from 'react-redux'
 

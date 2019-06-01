@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, Form, Message, Header, Image } from 'semantic-ui-react'
+import { Grid, Form, Message, Header} from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addMovieValidationFailed, addMovie, initAddMovieState } from '../../store/addMovieReducer'

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Icon, Button } from 'semantic-ui-react'
+import { Card, Button } from 'semantic-ui-react'
 class MyMovieItem extends Component {
 
     static defaultProps = {
@@ -30,7 +30,7 @@ class MyMovieItem extends Component {
             name,
             openedAt,
             description,
-            likeCnt,
+            // likeCnt,
         } = this.props;
         //'url(' + imageUrl + ')'
         //`url(${imageUrl})`
