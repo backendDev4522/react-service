@@ -12,12 +12,23 @@ import TestPage from './page/test/Testpage'
 import MyMovieListPage from './page/myMovieList/MyMovieListPags';
 
 /** 라우팅
- * /
- * /login
- * /signup
+ * 
+ * 
+ * 
  * 
  * */
+// 1
+import {createBrowserHistory} from 'history'
+import ReactGA from 'react-ga'
+// 2
+const history = createBrowserHistory();
 
+// history가 바뀔 때마다 호출
+history.listen((location, action) => {
+  const url = location.pathname + location.search;
+  ReactGA.pageview(url);
+
+})
 
 
 class App extends Component {
@@ -25,7 +36,8 @@ class App extends Component {
   render() {
 
     return (
-      <Router>
+      // 3
+      <Router history={history}>
         <Header />
         <Route path="/" exact component={() => {
           if (this.props.user && this.props.user.displayName) {

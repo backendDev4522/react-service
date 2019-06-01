@@ -8,6 +8,11 @@ import 'semantic-ui-css/semantic.min.css'
 import {configureStore} from './store/index'
 import {Provider} from 'react-redux'
 import {auth} from './store/authReducer'
+import ReactGA from 'react-ga';
+
+
+ReactGA.initialize('UA-141188531-1');
+
 var config = {
     apiKey: "AIzaSyDuleCznnA-Rppk2twoeeBS2lZ8tAKs_nA",
     authDomain: "react-board-6c9f9.firebaseapp.com",
